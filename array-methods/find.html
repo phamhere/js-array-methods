@@ -1,0 +1,112 @@
+<script src="../simpletest.js"></script>
+<script>
+  // It should not mutate the array on which it is called.
+  function find(array, callback, thisArg) {
+    const arrayLength = array.length
+    let findCallback = callback;
+    if (thisArg) {
+      findCallback = callback.bind(thisArg)
+    }
+
+    for (let i = 0; i < arrayLength; i++) {
+      if (findCallback(array[i], i, array)) {
+        return array[i];
+      }
+    }
+    return undefined;
+  }
+  tests({
+    'It should return the first element in the array where the callback returns a true value.': function () {
+      const findOutput = find([1, 2, 3], function (item) {
+        return item === 2;
+      })
+      eq(findOutput, 2);
+    },
+
+    'It should return undefined if the callback doesnt return a true value.': function () {
+      const findOutput = find([1, 1, 3], function (item) {
+        return item === 2;
+      })
+      eq(findOutput, undefined);
+    },
+
+    'It should run for every index from 0 to array.length - 1 even for unassigned values.': function () {
+      let counter = 0;
+      find([1, , 3], function () {
+        counter++
+      })
+      eq(counter, 3)
+    },
+
+    'It should pass in the ith element as the first argument to the callback.': function () {
+      find([1], function (item, i) {
+        eq(item, 1)
+      })
+    },
+
+    'It should pass the ith position as the second argument to the callback.': function () {
+      find([1], function (item, index) {
+        eq(index, 0)
+      })
+    },
+
+    'It should pass the original array as the third argument to the callback.': function () {
+      const inputArray = [1, 2, 3];
+      find(inputArray, function (item, i, originalArray) {
+        eq(inputArray, originalArray)
+      })
+    },
+
+    'It should accept an optional this object.': function () {
+      find([1], function () {
+        eq(this.name, 'Michael')
+      }, {
+        name: 'Michael'
+      })
+    },
+
+    'It should not mutate the array on which it is called.': function () {
+      const inputArray = [1, 2, 3]
+      find(inputArray, function () {})
+      eq(inputArray.length, 3)
+      eq(inputArray[1], 2)
+    },
+
+    'It should visit deleted elements.': function () {
+      const inputArray = [1, 2, 3]
+      find(inputArray, function (item, i) {
+        if (i === 0) {
+          delete inputArray[2]
+        }
+        if (i === 2) {
+          eq(item, undefined)
+        }
+      })
+    },
+
+    'It should not visit elements that are appended to the array after the call to find() begins.': function () {
+      let counter = 0
+      const inputArray = [1, 2, 3]
+      find(inputArray, function (item, i) {
+        if (i === 0) {
+          inputArray.push(4)
+        }
+        counter++
+      })
+      eq(counter, 3)
+    },
+
+    'If an existing, unvisited element of the array is changed by callback, its value passed to the visiting callback will be the value at the time that find visits that element\'s index.': function () {
+      const inputArray = [1, 2, 3]
+      find(inputArray, function (item, i) {
+        if (i === 0) {
+          inputArray[2] = 4
+        }
+        if (i === 3) {
+          eq(item, 4)
+        }
+      })
+    },
+
+  });
+</script>
