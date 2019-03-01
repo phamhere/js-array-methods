@@ -1,0 +1,83 @@
+<script src="../simpletest.js"></script>
+<script>
+  // It should pass the ith element element as the first argument to the callback
+  // It should pass the ith position as the second argument to the callback
+  // It should pass the original array as the third argument to the callback
+  // It should change the value of `this` if an optional thisArg is passed to the callback
+  // It should return true if the callback returns true for every array element
+  // It should return false if the call back returns false for any array element
+  // It should only invoke the callback for indices of the array with assigned values
+  // It should not mutate the array on which it is called
+  // It should not invoke the callback on elements appended to the aray after it's called 
+  // It should pass values to the callback that have been changed if they have been changed prior to when `every` visits that element's index
+  // It should not invoke the callback on elements that are deleted
+  // It should return true for an empty array
+
+  function findIndex(array, callback, thisArg) {
+    for (let i = 0; i < array.length; i++) {
+      callback()
+    }
+  }
+
+  tests({
+    'It should pass the ith element element as the first argument to the callback.': function () {
+      findIndex([1], function (item) {
+        eq(item, 1);
+      })
+    },
+
+    'It should pass the ith position as the second argument to the callback.': function () {
+      findIndex([1], function (item, index) {
+        eq(index, 0);
+      })
+    },
+
+    'It should pass the original array as the third argument to the callback.': function () {
+      let inputArray = [1, 2, 3];
+      findIndex(inputArray, function (item, index, originalArray) {
+        eq(inputArray, originalArray);
+      })
+    },
+
+    'It should change the value of `this` if an optional thisArg is passed to the callback.': function () {
+      findIndex([1], function () {
+        eq(this.name, 'Peter');
+      }, {
+        name: 'Peter'
+      })
+    },
+
+    'It should return true if the callback returns true for every array element.': function () {
+      fail();
+    },
+
+    'It should return false if the call back returns false for any array element.': function () {
+      fail();
+    },
+
+    'It should only invoke the callback for indices of the array with assigned values.': function () {
+      fail();
+    },
+
+    'It should not mutate the array on which it is called.': function () {
+      fail();
+    },
+
+    'It should not invoke the callback on elements appended to the aray after it\'s called.': function () {
+      fail();
+    },
+
+    'It should pass values to the callback that have been changed if they have been changed prior to when `every` visits that element\'s index.': function () {
+      fail();
+    },
+
+    'It should not invoke the callback on elements that are deleted.': function () {
+      fail();
+    },
+
+    'It should return true for an empty array.': function () {
+      fail();
+    }
+
+  });
+</script>
