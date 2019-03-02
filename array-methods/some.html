@@ -1,6 +1,6 @@
 <script src="../simpletest.js"></script>
 <script>
-  // It should pass the ith element element as the first argument to the callback
+  // It should pass the ith element as the first argument to the callback
   // It should pass the ith position as the second argument to the callback
   // It should pass the original array as the third argument to the callback
   // It should change the value of `this` if an optional thisArg is passed to the callback
@@ -43,7 +43,7 @@
   }
 
   tests({
-    'It should pass the ith element element as the first argument to the callback.': function () {
+    'It should pass the ith element as the first argument to the callback.': function () {
       some([1], function (item) {
         eq(item, 1);
       })
