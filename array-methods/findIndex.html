@@ -13,6 +13,13 @@
   // It should pass values to the callback that have been changed if they have been changed prior to when findIndex visits that element's index
   // It should still visit elements are are deleted
   function findIndex(array, callback, thisArg) {
+    if (typeof array !== 'object') {
+      throw new TypeError(`${array} is not an array`)
+    }
+    if (typeof callback !== 'function') {
+      throw new TypeError(`${callback} is not a function`)
+    }
+
     const arrayLength = array.length
     let findIndexCallback = callback;
 
@@ -129,6 +136,22 @@
       })
       eq(counter, 3);
     },
+
+    'It should throw a TypeError if the first argument isn\'t an array.': function () {
+      try {
+        findIndex(1, function () {})
+      } catch (err) {
+        eq(err instanceof TypeError, true)
+      }
+    },
+
+    'It should throw a TypeError if the second argument isn\'t an function.': function () {
+      try {
+        findIndex([1, 2, 3], 1)
+      } catch (err) {
+        eq(err instanceof TypeError, true)
+      }
+    }
 
   });
 </script>

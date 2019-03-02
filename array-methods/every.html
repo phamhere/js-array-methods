@@ -14,9 +14,15 @@
   // It should return true for an empty array
 
   function every(array, callback, thisArg) {
+    if (typeof array !== 'object') {
+      throw new TypeError(`${array} is not an array`)
+    }
+    if (typeof callback !== 'function') {
+      throw new TypeError(`${callback} is not a function`)
+    }
+
     const arrayLength = array.length;
     let everyCallback = callback;
-
 
     if (thisArg) {
       everyCallback = callback.bind(thisArg);
@@ -135,6 +141,22 @@
         return item < 1;
       })
       eq(output, true);
+    },
+
+    'It should throw a TypeError if the first argument isn\'t an array.': function () {
+      try {
+        every(1, function () {})
+      } catch (err) {
+        eq(err instanceof TypeError, true)
+      }
+    },
+
+    'It should throw a TypeError if the second argument isn\'t an function.': function () {
+      try {
+        every([1, 2, 3], 1)
+      } catch (err) {
+        eq(err instanceof TypeError, true)
+      }
     }
 
   });

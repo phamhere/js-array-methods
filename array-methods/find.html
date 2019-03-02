@@ -1,6 +1,13 @@
 <script src="../simpletest.js"></script>
 <script>
   function find(array, callback, thisArg) {
+    if (typeof array !== 'object') {
+      throw new TypeError(`${array} is not an array`)
+    }
+    if (typeof callback !== 'function') {
+      throw new TypeError(`${callback} is not a function`)
+    }
+
     const arrayLength = array.length
     let findCallback = callback;
     if (thisArg) {
@@ -106,6 +113,22 @@
         }
       })
     },
+
+    'It should throw a TypeError if the first argument isn\'t an array.': function () {
+      try {
+        find(1, function () {})
+      } catch (err) {
+        eq(err instanceof TypeError, true)
+      }
+    },
+
+    'It should throw a TypeError if the second argument isn\'t an function.': function () {
+      try {
+        find([1, 2, 3], 1)
+      } catch (err) {
+        eq(err instanceof TypeError, true)
+      }
+    }
 
   });
 </script>
