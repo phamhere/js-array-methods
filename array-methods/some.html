@@ -1,0 +1,124 @@
+<script src="../simpletest.js"></script>
+<script>
+  // It should pass the ith element element as the first argument to the callback
+  // It should pass the ith position as the second argument to the callback
+  // It should pass the original array as the third argument to the callback
+  // It should change the value of `this` if an optional thisArg is passed to the callback
+  // It should return false for any condition put on an empty array
+  // It should execute once for each array element until the callback returns true
+  // It should return true if the callback function returns true for any array element
+  // It should return false if the callback function never returns true for any array element
+  // It should only invoke the callback function for indices which have assigned values
+  // It should not mutate the array on which it is called
+  // It should not visit elements appeneded to the array after it's been called
+  // It should pass values to the callback that have been changed if they have been changed prior to when `some` visits that element's index
+  // It should not visit elements that are deleted
+
+
+  function some(array, callback, thisArg) {
+    if (typeof array !== 'object') {
+      throw new TypeError(`${array} is not an array`)
+    }
+    if (typeof callback !== 'function') {
+      throw new TypeError(`${callback} is not a function`)
+    }
+
+    // const arrayLength = array.length;
+    // let someCallback = callback;
+
+    // if (thisArg) {
+    //   someCallback = callback.bind(thisArg);
+    // }
+    // for (let i = 0; i < arrayLength; i++) {
+    //   if (array[i] === undefined) {
+    //     continue
+    //   }
+    //   if (!someCallback(array[i], i, array)) {
+    //     return false;
+    //   }
+    // }
+    // return true;
+  }
+
+  tests({
+    'It should pass the ith element element as the first argument to the callback.': function () {
+      some([1], function (item) {
+        eq(item, 1);
+      })
+    },
+
+    'It should pass the ith position as the second argument to the callback.': function () {
+      some([1], function (item, index) {
+        eq(index, 0);
+      })
+    },
+
+    'It should pass the original array as the third argument to the callback.': function () {
+      let inputArray = [1, 2, 3];
+      some(inputArray, function (item, index, originalArray) {
+        eq(inputArray, originalArray);
+      })
+    },
+
+    'It should change the value of `this` if an optional thisArg is passed to the callback.': function () {
+      some([1], function () {
+        eq(this.name, 'Peter');
+      }, {
+        name: 'Peter'
+      })
+    },
+
+    'It should return false for any condition put on an empty array.': function () {
+      fail();
+    },
+
+    'It should execute once for each array element until the callback returns true.': function () {
+      fail();
+    },
+
+    'It should return true if the callback function returns true for any array element.': function () {
+      fail();
+    },
+
+    'It should return false if the callback function never returns true for any array element.': function () {
+      fail();
+    },
+
+    'It should only invoke the callback function for indices which have assigned values.': function () {
+      fail();
+    },
+
+    'It should not mutate the array on which it is called.': function () {
+      fail();
+    },
+
+    'It should not visit elements appeneded to the array after it\'s been called.': function () {
+      fail();
+    },
+
+    'It should pass values to the callback that have been changed if they have been changed prior to when `some` visits that element\'s index.': function () {
+      fail();
+    },
+
+    'It should not visit elements that are deleted.': function () {
+      fail();
+    },
+
+    'It should throw a TypeError if the first argument isn\'t an array.': function () {
+      try {
+        some(1, function () {})
+      } catch (err) {
+        eq(err instanceof TypeError, true)
+      }
+    },
+
+    'It should throw a TypeError if the second argument isn\'t an function.': function () {
+      try {
+        some([1, 2, 3], 1)
+      } catch (err) {
+        eq(err instanceof TypeError, true)
+      }
+    }
+
+  });
+</script>
