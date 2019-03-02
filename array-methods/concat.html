@@ -1,0 +1,86 @@
+<script src="../simpletest.js"></script>
+<script>
+  // It should return a new array
+  // It should return a new array consisting of elements from the called on array, followed by the elements of the argument if it's an array
+  // It should return a new array consisting of elements from the called on array, followed by the argument itself if it's not an array
+  // It should not alter `this` or any of the arrays provided as arguments
+  // It should copy object references into the new array
+  // It should copy values of strings and numbers into the new array
+  // It should accept more than two arrays
+
+  function concat() {
+    const concatArray = [];
+
+    for (let i = 0; i < arguments.length; i++) {
+      if (Array.isArray(arguments[i])) {
+        for (let j = 0; j < arguments[i].length; j++) {
+          concatArray.push(arguments[i][j])
+        }
+      } else {
+        concatArray.push(arguments[i])
+      }
+    }
+
+    return concatArray;
+  }
+
+  tests({
+    'It should return a new array.': function () {
+      const inputArray = [1, 2, 3];
+      const output = concat(inputArray)
+      eq(inputArray !== output, true);
+      eq(Array.isArray(output), true);
+    },
+
+    'It should return a new array consisting of elements from the called on array, followed by the elements of the argument if it\'s an array.': function () {
+      const output = concat([1, 2], [3, 4])
+      eq(output.length, 4);
+      eq(output[0], 1);
+      eq(output[1], 2);
+      eq(output[2], 3);
+      eq(output[3], 4);
+    },
+
+    'It should return a new array consisting of elements from the called on array, followed by the argument itself if it\'s not an array.': function () {
+      const output = concat([1, 2], 3)
+      eq(output.length, 3);
+      eq(output[0], 1);
+      eq(output[1], 2);
+      eq(output[2], 3);
+    },
+
+    'It should not alter `this` or any of the arrays provided as arguments.': function () {
+      const inputArray1 = [1];
+      const inputArray2 = [2];
+      concat(inputArray1, inputArray2);
+      eq(inputArray1[0], 1);
+      eq(inputArray1.length, 1);
+      eq(inputArray2[0], 2);
+      eq(inputArray2.length, 1);
+    },
+
+    'It should copy object references into the new array.': function () {
+      const innerArray = [1];
+      const inputArray = [innerArray, 2, 3];
+      const output = concat(inputArray)
+      eq(innerArray, output[0]);
+    },
+
+    'It should copy values of strings and numbers into the new array.': function () {
+      const innerArray = [1];
+      const inputArray = [innerArray, 'hello', 3, true];
+      const output = concat(inputArray)
+      eq(output[1], 'hello');
+      eq(output[2], 3);
+      eq(output[3], true);
+    },
+
+    'It should accept more than two arrays.': function () {
+      const output = concat([1], [4], [7])
+      eq(output[0], 1);
+      eq(output[1], 4);
+      eq(output[2], 7);
+    }
+
+  });
+</script>

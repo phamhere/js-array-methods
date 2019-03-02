@@ -14,7 +14,7 @@
   // It should reduce the values in the array
 
   function reduceRight(array, callback, initialValue) {
-    if (typeof array !== 'object') {
+    if (!Array.isArray(array)) {
       throw new TypeError(`${array} is not an array`)
     }
 
