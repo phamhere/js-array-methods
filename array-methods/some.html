@@ -19,25 +19,27 @@
     if (typeof array !== 'object') {
       throw new TypeError(`${array} is not an array`)
     }
+
     if (typeof callback !== 'function') {
       throw new TypeError(`${callback} is not a function`)
     }
 
-    // const arrayLength = array.length;
-    // let someCallback = callback;
+    const arrayLength = array.length;
+    let someCallback = callback;
 
-    // if (thisArg) {
-    //   someCallback = callback.bind(thisArg);
-    // }
-    // for (let i = 0; i < arrayLength; i++) {
-    //   if (array[i] === undefined) {
-    //     continue
-    //   }
-    //   if (!someCallback(array[i], i, array)) {
-    //     return false;
-    //   }
-    // }
-    // return true;
+    if (thisArg) {
+      someCallback = callback.bind(thisArg);
+    }
+
+    for (let i = 0; i < arrayLength; i++) {
+      if (array[i] === undefined) {
+        continue
+      }
+      if (someCallback(array[i], i, array)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   tests({
@@ -69,39 +71,86 @@
     },
 
     'It should return false for any condition put on an empty array.': function () {
-      fail();
+      const output = some([], function (item) {})
+      eq(output, false);
     },
 
     'It should execute once for each array element until the callback returns true.': function () {
-      fail();
+      let counter = 0;
+      some([1, 2, 3, 4], function (item) {
+        counter++;
+        return item === 3;
+      })
+      eq(counter, 3);
     },
 
     'It should return true if the callback function returns true for any array element.': function () {
-      fail();
+      const output = some([1, 2, 3, 4], function (item) {
+        return item === 3;
+      })
+      eq(output, true);
     },
 
     'It should return false if the callback function never returns true for any array element.': function () {
-      fail();
+      const output = some([1, 2, 3], function (item) {
+        return item === 4;
+      })
+      eq(output, false);
     },
 
     'It should only invoke the callback function for indices which have assigned values.': function () {
-      fail();
+      let counter = 0;
+      some([, 1, , , 4, , ], function (item) {
+        counter++;
+      })
+      eq(counter, 2);
     },
 
     'It should not mutate the array on which it is called.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      some(inputArray, function () {})
+      eq(inputArray.length, 3);
+      eq(inputArray[0], 1);
+      eq(inputArray[1], 2);
+      eq(inputArray[2], 3);
     },
 
     'It should not visit elements appeneded to the array after it\'s been called.': function () {
-      fail();
+      let counter = 0;
+      const inputArray = [1, 2, 3];
+      some(inputArray, function (item, i) {
+        if (i === 0) {
+          inputArray.push(4)
+        }
+        counter++
+      })
+      eq(counter, 3)
     },
 
     'It should pass values to the callback that have been changed if they have been changed prior to when `some` visits that element\'s index.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      some(inputArray, function (item, i) {
+        if (i === 0) {
+          inputArray[2] = 4;
+        }
+        if (i === 2) {
+          eq(item, 4);
+        }
+      })
     },
 
     'It should not visit elements that are deleted.': function () {
-      fail();
+      let visited = false;
+      const inputArray = [1, 2, 3];
+      some(inputArray, function (item, i) {
+        if (i === 0) {
+          delete inputArray[2];
+        }
+        if (i === 2) {
+          visited = true;
+        }
+      })
+      eq(visited, false);
     },
 
     'It should throw a TypeError if the first argument isn\'t an array.': function () {
