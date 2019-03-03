@@ -6,12 +6,27 @@
   // It should take an optional index to start the search at that defaults to array.length - 1
   // It should search the whole array if the optional index is greater than or equal to the length of the array
   // It should offset from the end of the array if the optional index negative
-  // It should search back to fronteven when the optional index is negative
+  // It should search back to front even when the optional index is negative
   // It should return -1 if the calculated index is less than 0 and not search the array
 
 
   function lastIndexOf(array, searchElement, fromIndex) {
+    let startingIndex = array.length - 1;
 
+    if (fromIndex !== undefined) {
+      if (fromIndex < 0) {
+        startingIndex = array.length + fromIndex
+      } else {
+        startingIndex = fromIndex;
+      }
+    }
+
+    for (let i = startingIndex; i >= 0; i--) {
+      if (array[i] === searchElement) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   tests({
@@ -21,31 +36,40 @@
     },
 
     'It should return -1 if the given element is not present in the array.': function () {
-      fail();
+      const index = lastIndexOf([1, 2, 3], 4)
+      eq(index, -1);
     },
 
     'It should search the array backwards.': function () {
-      fail();
+      const index = lastIndexOf([1, 1, 1], 1)
+      eq(index, 2);
     },
 
     'It should take an optional index to start the search at that defaults to array.length - 1.': function () {
-      fail();
+      let index = lastIndexOf([2, 2, 2], 2)
+      eq(index, 2);
+      index = lastIndexOf([2, 2, 2], 2, 0)
+      eq(index, 0);
     },
 
     'It should search the whole array if the optional index is greater than or equal to the length of the array.': function () {
-      fail();
+      const index = lastIndexOf([1, 2, 3], 1, 100)
+      eq(index, 0);
     },
 
     'It should offset from the end of the array if the optional index negative.': function () {
-      fail();
+      const index = lastIndexOf([1, 2, 3, 3], 3, -2)
+      eq(index, 2);
     },
 
-    'It should search back to fronteven when the optional index is negative.': function () {
-      fail();
+    'It should search back to front even when the optional index is negative.': function () {
+      const index = lastIndexOf([1, 2, 2, 3], 2, -3)
+      eq(index, 1);
     },
 
     'It should return -1 if the calculated index is less than 0 and not search the array.': function () {
-      fail();
+      const index = lastIndexOf([1, 2, 3], 2, -4)
+      eq(index, -1);
     }
 
   });
