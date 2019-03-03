@@ -3,31 +3,72 @@
   // It should add one or more elements to the end of the array
   // It should add more than one element to the end of the array
   // It should return the new length of the array
-  // It should use 0 as the index if the length property cannot be converted into a number
-  // It should rely on a length property to determine where to start inserting the given values
-
+  // It should use 0 as the index if the length property cannot be converted into a number.
+  // It should be able to merge two arrays
+  // It should work for an array-like object
 
 
   function push(array) {
+    if (array.length === undefined) {
+      array.length = 0;
+    }
 
+    if (Array.isArray(arguments[1])) {
+      for (let i = 0; i < arguments[1].length; i++) {
+        array[array.length] = arguments[1][i];
+      }
+      return array.length;
+    }
+
+    for (let i = 1; i < arguments.length; i++) {
+      array[array.length] = arguments[i];
+
+      if (!(array instanceof Array)) {
+        array.length++
+      }
+    }
+
+    return array.length;
   }
 
   tests({
     'It should add one or more elements to the end of the array.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      push(inputArray, 4);
+      eq(inputArray[3], 4);
     },
 
     'It should add more than one element to the end of the array.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      push(inputArray, 4, 5, 6);
+      eq(inputArray[3], 4);
+      eq(inputArray[4], 5);
+      eq(inputArray[5], 6);
     },
 
     'It should return the new length of the array.': function () {
-      fail();
+      const output = push([1, 2, 3], 4);
+      eq(output, 4);
     },
 
     'It should use 0 as the index if the length property cannot be converted into a number.': function () {
-      fail();
-    }
+      const obj = {}
+      const output = push(obj)
+      eq(obj.length, 0);
+    },
+
+    'It should be able to merge two arrays.': function () {
+      const vegetables = ['parsnip', 'potato'];
+      const moreVegs = ['celery', 'beetroot'];
+      const output = push(vegetables, moreVegs);
+      eq(output, 4);
+    },
+
+    'It should work for an array-like object.': function () {
+      const obj = {}
+      const output = push(obj, 1, 2);
+      eq(obj.length, 2);
+    },
 
   });
 </script>
