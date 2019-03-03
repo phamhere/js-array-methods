@@ -8,33 +8,58 @@
   // It should return -1 if the array length is 0
 
 
-  function indexOf() {
+  function indexOf(array, searchElement, fromIndex) {
+    let startingIndex = 0;
 
+    if (fromIndex) {
+      if (fromIndex < 0) {
+        if (array.length + fromIndex >= 0) {
+          startingIndex = array.length + fromIndex;
+        }
+      } else {
+        startingIndex = fromIndex;
+      }
+    }
+
+    for (let i = startingIndex; i < array.length; i++) {
+      if (array[i] === searchElement) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   tests({
     'It should return the first index the given element can be found in the array.': function () {
-      fail();
+      const index = indexOf([1, 2, 3], 3)
+      eq(index, 2);
     },
 
     'It should return -1 if the given element cannot be found in the array.': function () {
-      fail();
+      const index = indexOf([1, 2, 3], 4)
+      eq(index, -1);
     },
 
     'It should take an optional index to start the search at.': function () {
-      fail();
+      const index = indexOf([1, 2, 3], 1, 1)
+      eq(index, -1)
     },
 
     'It should return -1 if the optional index is greater than or equal to the array\'s length.': function () {
-      fail();
+      const index = indexOf([1, 2, 3], 1, 4)
+      eq(index, -1)
     },
 
     'It should start at the offset from the end of the array if the optional index is negative.': function () {
-      fail();
+      let index = indexOf([1, 2, 3], 1, -3)
+      eq(index, 0)
+      index = indexOf([1, 2, 3], 1, -2)
+      eq(index, -1)
     },
 
     'It should return -1 if the array length is 0.': function () {
-      fail();
+      let index = indexOf([], 1)
+      eq(index, -1);
     },
 
   });
