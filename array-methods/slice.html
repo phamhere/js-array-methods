@@ -14,57 +14,115 @@
   // It should copy the values of strings, numbers, and booleans into the new array that when changed do not affect the other array
 
 
-  function slice(array, ) {
+  function slice(array, begin, end) {
+    const sliceArray = [];
+    let startingIndex = 0;
+    let endingIndex = array.length;
 
+    if (begin) {
+      if (begin < 0) {
+        startingIndex = array.length + begin;
+      } else {
+        startingIndex = begin;
+      }
+    }
+
+    if (end) {
+      if (end < 0) {
+        endingIndex = array.length + end;
+      } else {
+        if (end <= array.length) {
+          endingIndex = end;
+        }
+      }
+    }
+
+    for (let i = startingIndex; i < endingIndex; i++) {
+      sliceArray.push(array[i]);
+    }
+
+    return sliceArray;
   }
 
   tests({
     'It should return a new array.': function () {
-      fail();
+      const inputArray = [1];
+      const output = slice(inputArray)
+      eq(inputArray !== output, true);
+      eq(Array.isArray(output), true);
     },
 
     'It should not modify the original array.': function () {
-      fail();
+      const inputArray = [1];
+      const output = slice(inputArray)
+      eq(inputArray[0], 1);
+      eq(inputArray.length, 1);
+    },
+
+    'It should return a shallow copy of a portion of the array.': function () {
+      const output = slice([1, 2, 3])
+      eq(output.length, 3);
+      eq(output[0], 1);
+      eq(output[1], 2);
+      eq(output[1], 2);
+      eq(output[2], 3);
     },
 
     'It should accept a beginning index that begins at 0 if undefined.': function () {
-      fail();
+      const output = slice([1, 2, 3])
+      eq(output.length, 3);
+      eq(output[0], 1);
     },
 
     'It should accept a beginning index that if negative, offsets from the end of the sequence.': function () {
-      fail();
+      const output = slice([1, 2, 3], -2)
+      eq(output.length, 2);
+      eq(output[0], 2);
     },
 
     'It should return an empty array if the beginning index is greater than array.length.': function () {
-      fail();
+      const output = slice([1, 2, 3], 100)
+      eq(output.length, 0);
     },
 
     'It should extract through array.length if the ending index is emitted.': function () {
-      fail();
+      const output = slice([1, 2, 3])
+      eq(output.length, 3);
+      eq(output[2], 3);
     },
 
     'It should extract to, but not including, the ending index.': function () {
-      fail();
+      const output = slice([1, 2, 3], 0, 2)
+      eq(output.length, 2);
+      eq(output[2], undefined);
     },
 
     'It should extract to, but not including, the offset from the end of the sequence if the ending index is negative.': function () {
-      fail();
+      const output = slice([1, 2, 3], 0, -1)
+      eq(output.length, 2);
+      eq(output[2], undefined);
     },
 
     'It should extract through array.length if the ending index is greater than array.length.': function () {
-      fail();
-    },
-
-    'It should return a shallow copy of a portion of the array selected from begin to end (end not included).': function () {
-      fail();
+      const output = slice([1, 2, 3], 0, 10)
+      eq(output.length, 3)
     },
 
     'It should copy object references into the new array so that they refer to the same object.': function () {
-      fail();
+      const innerObject = [1];
+      const output = slice([innerObject, 2])
+      eq(output[0], innerObject);
     },
 
     'It should copy the values of strings, numbers, and booleans into the new array that when changed do not affect the other array.': function () {
-      fail();
+      const inputArray = [1, true, "hello"];
+      const output = slice(inputArray)
+      output[0] = 2;
+      output[1] = false;
+      output[2] = "hi";
+      eq(inputArray[0], 1);
+      eq(inputArray[1], true);
+      eq(inputArray[2], 'hello');
     }
 
   });
