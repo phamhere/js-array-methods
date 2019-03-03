@@ -10,41 +10,67 @@
   // It should convert elements that are undefined or null into empty strings
 
 
-  function join(array, separator) {
+  function join(array, separatorString) {
+    let outputStr = '';
+    let separator = ',';
 
+    if (separatorString !== undefined) {
+      separator = separatorString;
+    }
+
+    for (let i = 0; i < array.length; i++) {
+      if (array[i] === undefined || array[i] === null) {
+        array[i] = '';
+      }
+      if (i === array.length - 1) {
+        outputStr += array[i]
+      } else {
+        outputStr += array[i] + separator
+      }
+    }
+
+    return outputStr;
   }
 
   tests({
     'It should return a new string.': function () {
-      fail();
+      const output = join([1, 2, 3])
+      eq(typeof output === 'string', true);
     },
 
     'It should concatenate all the elements in an array.': function () {
-      fail();
+      const output = join([1, 2, 3])
+      eq(output, '1,2,3');
     },
 
     'It should separate the concatenated items with commas by default.': function () {
-      fail();
+      const output = join([1, 2, 3])
+      eq(output, '1,2,3');
     },
 
     'It should separate the concatenated items with the given separator if provided.': function () {
-      fail();
+      const output = join([1, 2, 3], '-')
+      eq(output, '1-2-3');
     },
 
     'It should join the elements without any characters in between if the separator is an empty string.': function () {
-      fail();
+      const output = join([1, 2, 3], '')
+      eq(output, '123');
     },
 
     'It should, if the array only has one item, return that item without using the separator.': function () {
-      fail();
+      const output = join([1], '-')
+      eq(output, '1');
     },
 
     'It should return an empty string if arr.length is 0.': function () {
-      fail();
+      const output = join([])
+      eq(output, '')
     },
 
     'It should convert elements that are undefined or null into empty strings.': function () {
-      fail();
+      const output = join([1, undefined, 2, null, 3])
+      eq(output, '1,,2,,3')
     }
 
   });
