@@ -9,37 +9,59 @@
   // It should search the entire array if the computed index is less or equal than -1 * array.length
 
 
-  function includes(array) {
+  function includes(array, valueToFind, fromIndex) {
+    let startingIndex = 0;
 
+    if (fromIndex) {
+      if (fromIndex < 0) {
+        startingIndex = array.length + fromIndex
+      } else {
+        startingIndex = fromIndex;
+      }
+    }
+
+    for (let i = startingIndex; i < array.length; i++) {
+      if (array[i] === valueToFind) {
+        return true;
+      }
+    }
+    return false;
   }
 
   tests({
     'It should return true if the given value is found within the array.': function () {
-      fail();
+      const output = includes([1, 2, 3], 2)
+      eq(output, true);
     },
 
     'It should return false if the given value isn\'t found within the array.': function () {
-      fail();
+      const output = includes([1, 2, 3], 4)
+      eq(output, false);
     },
 
     'It should take in an optional index that defaults to 0.': function () {
-      fail();
+      const output = includes([1, 2, 3], 1)
+      eq(output, true);
     },
 
     'It should take in an optional index that starts at that index for positive values.': function () {
-      fail();
+      const output = includes([1, 2, 3], 1, 1)
+      eq(output, false);
     },
 
     'It should take in an optional index that starts at array.length + index for negative values.': function () {
-      fail();
+      const output = includes([1, 2, 3], 1, -2)
+      eq(output, false);
     },
 
     'It should return false if the optional index is greater than or equal to array.length.': function () {
-      fail();
+      const output = includes([1, 2, 3], 1, 100)
+      eq(output, false);
     },
 
     'It should search the entire array if the computed index is less or equal than -1 * array.length.': function () {
-      fail();
+      const output = includes([1, 2, 3], 2, -10)
+      eq(output, true);
     }
 
   });
