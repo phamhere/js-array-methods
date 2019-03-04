@@ -7,24 +7,54 @@
 
 
   function unshift(array) {
+    array.length += arguments.length - 1;
 
+    for (let i = 0; i < array.length - (arguments.length - 1); i++) {
+      array[i + arguments.length - 1] = array[i];
+    }
+
+    for (let i = 1; i < arguments.length; i++) {
+      array[i - 1] = arguments[i];
+    }
+    return array.length;
   }
 
   tests({
     'It should add one or more elements to the beginning of the array.': function () {
-      fail();
+      const inputArray = [4, 5, 6];
+      unshift(inputArray, 1, 2, 3);
+      eq(inputArray.length, 6);
     },
 
     'It should insert the elements in the same order they were passed as parameters.': function () {
-      fail();
+      const inputArray = [4, 5, 6];
+      unshift(inputArray, 1, 2, 3);
+      eq(inputArray[0], 1);
+      eq(inputArray[1], 2);
+      eq(inputArray[2], 3);
+      eq(inputArray[3], 4);
+      eq(inputArray[4], 5);
+      eq(inputArray[5], 6);
     },
 
     'It should return the new length of the array.': function () {
-      fail();
+      const output = unshift([2, 3], 1)
+      eq(output, 3);
     },
 
     'It should be available to objects resembling arrays if they have a length property.': function () {
-      fail();
+      const obj = {
+        'length': 2,
+        '0': 3,
+        '1': 4
+      };
+      const output = unshift(obj, 1, 2);
+      eq(obj.length, 4);
+      eq(output, 4);
+      eq(obj[0], 1);
+      eq(obj[1], 2);
+      eq(obj[2], 3);
+      eq(obj[3], 4);
     }
 
   });
