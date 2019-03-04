@@ -11,40 +11,98 @@
 
 
   function fill(array, filler, start, end) {
+    let startingIndex = 0;
+    let endingIndex = array.length
 
+    if (start) {
+      if (start < 0) {
+        if (array.length + start >= 0) {
+          startingIndex = array.length + start;
+        }
+      } else {
+        startingIndex = start;
+      }
+    }
+
+    if (end) {
+      if (end < 0) {
+        endingIndex = array.length + end;
+      } else if (end < array.length) {
+        endingIndex = end;
+      }
+    }
+
+    for (let i = startingIndex; i < endingIndex; i++) {
+      array[i] = filler;
+    }
+    return array;
   }
 
   tests({
     'It should modify all the elements of an array defaulting to zero as the start index and the array length as the end index.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      fill(inputArray, 4);
+      eq(inputArray[0], 4);
+      eq(inputArray[1], 4);
+      eq(inputArray[2], 4);
     },
 
     'It should return the modified array, not a copy of it.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      const output = fill(inputArray, 4);
+      eq(inputArray, output);
     },
 
     'It should accept a start index argument.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      const output = fill(inputArray, 4, 1);
+      eq(inputArray[0], 1);
+      eq(inputArray[1], 4);
+      eq(inputArray[2], 4);
     },
 
     'It should accept an end index argument (not inclusive).': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      const output = fill(inputArray, 4, 0, 2);
+      eq(inputArray[0], 4);
+      eq(inputArray[1], 4);
+      eq(inputArray[2], 3);
     },
 
     'It should treat negative start indices as array.length + start index.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      const output = fill(inputArray, 4, -2);
+      eq(inputArray[0], 1);
+      eq(inputArray[1], 4);
+      eq(inputArray[2], 4);
     },
 
     'It should treat negative end indices as array.length + end index.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      const output = fill(inputArray, 4, 0, -1);
+      eq(inputArray[0], 4);
+      eq(inputArray[1], 4);
+      eq(inputArray[2], 3);
     },
 
     'It should copy the reference and fill the array with references to that object if passed an object.': function () {
-      fail();
+      const obj = {};
+      const inputArray = [1, 2, 3];
+      const output = fill(inputArray, obj);
+      eq(inputArray[0], obj);
+      eq(inputArray[1], obj);
+      eq(inputArray[2], obj);
     },
 
     'It should work on array-like objects.': function () {
-      fail();
+      const obj = {
+        'length': 2,
+        '0': 1,
+        '1': 2
+      };
+      const output = fill(obj, 4);
+      eq(obj[0], 4);
+      eq(obj[1], 4);
     }
 
   });
