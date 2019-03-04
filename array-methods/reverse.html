@@ -1,0 +1,42 @@
+<script src="../simpletest.js"></script>
+<script>
+  // It should return a reference to the original array
+  // It should mutate the original array, transposing elements accordingly
+  // It should return the reversed array
+
+
+  function reverse(array) {
+    const copyOfArray = array.slice();
+
+    for (let i = 0, j = array.length - 1; i < array.length; i++, j--) {
+      array[i] = copyOfArray[j];
+    }
+
+    return array;
+  }
+
+  tests({
+    'It should return a reference to the original array.': function () {
+      const inputArray = [1, 2, 3];
+      const output = reverse(inputArray);
+      eq(inputArray, output);
+    },
+
+    'It should mutate the original array, transposing elements accordingly.': function () {
+      const inputArray = [1, 2, 3];
+      reverse(inputArray);
+      eq(inputArray[0], 3);
+      eq(inputArray[1], 2);
+      eq(inputArray[2], 1);
+    },
+
+    'It should return the reversed array.': function () {
+      const inputArray = [1, 2, 3];
+      const output = reverse(inputArray);
+      eq(output[0], 3);
+      eq(output[1], 2);
+      eq(output[2], 1);
+    }
+
+  });
+</script>
