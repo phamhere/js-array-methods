@@ -35,9 +35,7 @@
 
     let sliceOfArray;
     if (!(array instanceof Array)) {
-      array = Object.prototype.valueOf.call(array);
-      const copyOfArray = Array.prototype.slice.call(array)
-      sliceOfArray = copyOfArray.slice(startingIndex, endingIndex);
+      sliceOfArray = Array.prototype.slice.call(array, startingIndex, endingIndex);
     } else {
       sliceOfArray = array.slice(startingIndex, endingIndex);
     }
