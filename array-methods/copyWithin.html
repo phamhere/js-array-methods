@@ -12,49 +12,140 @@
   // It should work for array-like objects
 
 
-  function copyWithin(array) {
+  function copyWithin(array, target, start, end) {
+    let targetIndex = target;
+    let startingIndex = 0;
+    let endingIndex = array.length;
 
+    if (target < 0) {
+      if (array.length + target < 0) {
+        targetIndex = 0;
+      } else {
+        targetIndex = array.length + target
+      }
+    }
+
+    if (start) {
+      startingIndex = start;
+    }
+
+    if (end) {
+      endingIndex = end;
+    }
+
+    let sliceOfArray;
+    if (!(array instanceof Array)) {
+      array = Object.prototype.valueOf.call(array);
+      const copyOfArray = Array.prototype.slice.call(array)
+      sliceOfArray = copyOfArray.slice(startingIndex, endingIndex);
+    } else {
+      sliceOfArray = array.slice(startingIndex, endingIndex);
+    }
+
+    for (let i = targetIndex, j = 0; i < sliceOfArray.length; i++, j++) {
+      array[i] = sliceOfArray[j];
+    }
+
+    return array;
   }
 
   tests({
     'It should return the original array.': function () {
-      fail();
+      const inputArray = [1, 2, 3, 4, 5];
+      const output = copyWithin(inputArray);
+      eq(inputArray, output);
     },
 
     'It should not modify the original array\'s size.': function () {
-      fail();
+      const inputArray = [1, 2, 3, 4, 5];
+      const output = copyWithin(inputArray);
+      eq(inputArray.length, 5);
     },
 
     'It should shallow copy part of an array to another location in the same array, defaulting to index 0 for the start and array.length for the end.': function () {
-      fail();
+      const inputArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      copyWithin(inputArray, 2);
+      eq(inputArray[0], 1);
+      eq(inputArray[1], 2);
+      eq(inputArray[2], 1);
+      eq(inputArray[3], 2);
+      eq(inputArray[4], 3);
+      eq(inputArray[5], 4);
+      eq(inputArray[6], 5);
+      eq(inputArray[7], 6);
+      eq(inputArray[8], 7);
+      eq(inputArray[9], 8);
     },
 
     'It should offset the target index from the end if it\'s negative.': function () {
-      fail();
+      const inputArray = [1, 2, 3, 4, 5];
+      copyWithin(inputArray, -2);
+      eq(inputArray[0], 1);
+      eq(inputArray[1], 2);
+      eq(inputArray[2], 3);
+      eq(inputArray[3], 1);
+      eq(inputArray[4], 2);
     },
 
     'It should copy nothing if the target index is greater than array.length.': function () {
-      fail();
+      const inputArray = [1, 2, 3, 4, 5];
+      copyWithin(inputArray, 100);
+      eq(inputArray[0], 1);
+      eq(inputArray[1], 2);
+      eq(inputArray[2], 3);
+      eq(inputArray[3], 4);
+      eq(inputArray[4], 5);
     },
 
     'It should accept a start index argument.': function () {
-      fail();
+      const inputArray = [1, 2, 3, 4, 5];
+      copyWithin(inputArray, 0, 3);
+      eq(inputArray[0], 4);
+      eq(inputArray[1], 5);
+      eq(inputArray[2], 3);
+      eq(inputArray[3], 4);
+      eq(inputArray[4], 5);
     },
 
     'It should offset the start index from the end if it\'s negative.': function () {
-      fail();
+      const inputArray = [1, 2, 3, 4, 5];
+      copyWithin(inputArray, 0, -2);
+      eq(inputArray[0], 4);
+      eq(inputArray[1], 5);
+      eq(inputArray[2], 3);
+      eq(inputArray[3], 4);
+      eq(inputArray[4], 5);
     },
 
     'It should accept an end index argument.': function () {
-      fail();
+      const inputArray = [1, 2, 3, 4, 5];
+      copyWithin(inputArray, 0, 3, 4);
+      eq(inputArray[0], 4);
+      eq(inputArray[1], 2);
+      eq(inputArray[2], 3);
+      eq(inputArray[3], 4);
+      eq(inputArray[4], 5);
     },
 
     'It should offset the end index from the end if it\'s negative.': function () {
-      fail();
+      const inputArray = [1, 2, 3, 4, 5];
+      copyWithin(inputArray, 0, 3, -1);
+      eq(inputArray[0], 4);
+      eq(inputArray[1], 2);
+      eq(inputArray[2], 3);
+      eq(inputArray[3], 4);
+      eq(inputArray[4], 5);
     },
 
     'It should work for array-like objects.': function () {
-      fail();
+      const obj = {
+        'length': 5,
+        '3': 1
+      };
+      copyWithin(obj, 0, 3);
+      eq(obj.length, 5);
+      eq(obj[0], 1);
+      eq(obj[3], 1);
     }
 
   });
