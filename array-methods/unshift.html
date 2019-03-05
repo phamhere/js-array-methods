@@ -7,10 +7,17 @@
 
 
   function unshift(array) {
+    let arraySlice;
+    if (!(Array.isArray(array))) {
+      arraySlice = Array.prototype.slice.call(array);
+    } else {
+      arraySlice = array.slice();
+    }
+
     array.length += arguments.length - 1;
 
     for (let i = 0; i < array.length - (arguments.length - 1); i++) {
-      array[i + arguments.length - 1] = array[i];
+      array[i + arguments.length - 1] = arraySlice[i];
     }
 
     for (let i = 1; i < arguments.length; i++) {
