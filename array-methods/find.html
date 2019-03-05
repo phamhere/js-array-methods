@@ -1,5 +1,20 @@
 <script src="../simpletest.js"></script>
 <script>
+  // It should return the first element in the array where the callback returns a true value
+  // It should return undefined if the callback doesnt return a true value
+  // It should run for every index from 0 to array.length - 1 even for unassigned values
+  // It should pass in the ith element as the first argument to the callback
+  // It should pass the ith position as the second argument to the callback
+  // It should pass the original array as the third argument to the callback
+  // It should accept an optional this object
+  // It should not mutate the array on which it is called
+  // It should visit deleted elements
+  // It should not visit elements that are appended to the array after the call to find() begins
+  // If an existing, unvisited element of the array is changed by callback, its value passed to the visiting callback will be the value at the time that find visits that element\'s index
+  // It should throw a TypeError if the first argument isn\'t an array
+  // It should throw a TypeError if the second argument isn\'t an function
+
+
   function find(array, callback, thisArg) {
     if (!(Array.isArray(array))) {
       throw new TypeError(`${array} is not an array`)
