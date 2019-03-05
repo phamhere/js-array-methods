@@ -26,11 +26,19 @@
     }
 
     if (start) {
-      startingIndex = start;
+      if (start < 0) {
+        startingIndex = array.length + start
+      } else {
+        startingIndex = start;
+      }
     }
 
     if (end) {
-      endingIndex = end;
+      if (end < 0) {
+        endingIndex = array.length + end;
+      } else {
+        endingIndex = end;
+      }
     }
 
     let sliceOfArray;
@@ -40,7 +48,10 @@
       sliceOfArray = array.slice(startingIndex, endingIndex);
     }
 
-    for (let i = targetIndex, j = 0; i < sliceOfArray.length; i++, j++) {
+    for (let i = targetIndex, j = 0; j < sliceOfArray.length; i++, j++) {
+      if (array[i] === undefined && array instanceof Array) {
+        break;
+      }
       array[i] = sliceOfArray[j];
     }
 
