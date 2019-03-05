@@ -14,52 +14,137 @@
 
 
   function splice(array, start, deleteCount) {
+    let startingIndex = 0;
+    let deleteCounter = array.length;
+    const deleteArray = [];
 
+    if (start) {
+      if (start < 0 && Math.abs(start) > array.length) {
+        startingIndex = 0;
+      } else if (start < 0) {
+        startingIndex = array.length + start;
+      } else if (start > array.length) {
+        startingIndex = array.length;
+      } else {
+        startingIndex = start;
+      }
+    }
+
+    if (deleteCount !== undefined) {
+      if (deleteCount > array.length) {
+        deleteCounter = array.length;
+      } else if (deleteCount < 0) {
+        deleteCounter = 0;
+      } else {
+        deleteCounter = deleteCount;
+      }
+    }
+
+    for (let i = 0; i < deleteCounter && startingIndex < array.length; i++) {
+      for (let j = startingIndex; j < array.length; j++) {
+        if (j === startingIndex) {
+          deleteArray.push(array[j]);
+        }
+        array[j] = array[j + 1];
+      }
+      array.length -= 1;
+    }
+
+    if (arguments.length > 3) {
+      const itemArray = [];
+      for (let i = 3; i < arguments.length; i++) {
+        itemArray.push(arguments[i]);
+      }
+      const endSlice = array.slice(startingIndex);
+      array.length = startingIndex;
+      array.push(...itemArray);
+      array.push(...endSlice);
+    }
+
+    return deleteArray;
   }
 
   tests({
     'It should have a start index with origin 0.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      splice(inputArray, 0);
+      eq(inputArray.length, 0);
     },
 
     'It should have a start index set to array.length if greater than array.length.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      splice(inputArray, 100);
+      eq(inputArray.length, 3);
     },
 
     'It should offset from the end of the array if the start index is negative.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      splice(inputArray, -1);
+      eq(inputArray.length, 2);
     },
 
     'It should have the start index set to 0 if the start index is negative and the absolute value is greater than array.length.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      splice(inputArray, -10);
+      eq(inputArray.length, 0);
     },
 
     'It should delete the deleteCount\'s number of elements from the start index if provided.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      splice(inputArray, 0, 1);
+      eq(inputArray.length, 2);
+      eq(inputArray[0], 2);
+      eq(inputArray[1], 3);
     },
 
     'It should delete all the elements from the start index to the end of the array if the deleteCount is omitted.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      splice(inputArray, 0);
+      eq(inputArray.length, 0);
     },
 
     'It should delete all the elements from the start index to the end of the array if the deleteCount is equal to or larger than array.length - start index.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      splice(inputArray, 0, 100);
+      eq(inputArray.length, 0);
     },
 
-    'It should not delete any elements if the deleteCount is 0 or negative.': function () {
-      fail();
+    'It should not delete any elements if the deleteCount is 0.': function () {
+      const inputArray = [1, 2, 3];
+      splice(inputArray, 0, 0);
+      eq(inputArray.length, 3);
+    },
+
+    'It should not delete any elements if the deleteCount is negative.': function () {
+      const inputArray = [1, 2, 3];
+      splice(inputArray, 0, -10);
+      eq(inputArray.length, 3);
     },
 
     'It should accept item arguments to add to the array beginning at the start index.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      splice(inputArray, 1, 0, 7, 8);
+      eq(inputArray.length, 5);
+      eq(inputArray[0], 1);
+      eq(inputArray[1], 7);
+      eq(inputArray[2], 8);
+      eq(inputArray[3], 2);
+      eq(inputArray[4], 3);
     },
 
     'It should return an array of deleted elements or element.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      const output = splice(inputArray, 0);
+      eq(output.length, 3);
+      eq(output[0], 1);
+      eq(output[1], 2);
+      eq(output[2], 3);
     },
 
     'It should return an empty array if no elements were deleted.': function () {
-      fail();
+      const inputArray = [1, 2, 3];
+      const output = splice(inputArray, 0, 0);
+      eq(output.length, 0);
     }
 
   });
