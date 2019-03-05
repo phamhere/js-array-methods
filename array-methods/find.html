@@ -1,7 +1,7 @@
 <script src="../simpletest.js"></script>
 <script>
   function find(array, callback, thisArg) {
-    if (typeof array !== 'object') {
+    if (!(Array.isArray(array))) {
       throw new TypeError(`${array} is not an array`)
     }
     if (typeof callback !== 'function') {
